@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+  
+    <div class="top"> <button class="btn btn-primary p-3 fw-bold bg-primary bg-gradient" data-bs-toggle="modal" data-bs-target="#exampleModal"  style="width: 80vw;font-size: large;"> Add Recipe </button></div>
+    <div class="main-container">
+        <% if(recipes.length != 0) {%>
+        <% for (let i = 0; i < recipes.length; i++) { %>
+          
+          <div class="mid bg-secondary-subtle">
+            <div class="left"><%= recipes[i].name %></div>
+            <div><button class="btn btn-default bg-warning p-3" style="padding-left: 10px; padding-right: 10px;" data-bs-toggle="collapse" href="#<%= i %>" aria-expanded="false" aria-controls="collapseExample">Views</button></div>  
+          </div>
+          <div>
+            <div class="collapse" id="<%= i %>">
+              <div class="card card-body">
+              <br>
+              <br>
+              <p><strong>Indgridients: </strong> <%= recipes[i].required %></p>
+              <p><strong>Directions: </strong> <%= recipes[i].how %></p>
+              <hr>
+              <div>
+                <button type="button" recipie-id = "<%=recipes[i].id %>" recipie-name = "<%=recipes[i].name %>" recipie-required = "<%=recipes[i].required %>" recipie-how = "<%= recipes[i].how %>" data-bs-toggle="modal" data-bs-target="#editModal" data-id="<%=recipes[i].id %>" class="btn btn-default" style="height: 100%; width: 50px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                  </svg>
+                </button>
+                <button type="button" data-id = "<%= recipes[i].id %>" class="btn btn-default delete-button" style="display: inline; width: 50px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+
+        <% } %>
+        <% } else { %>
+          <div class="mid">
+            <p>No Recipes to display</p>
+          </div>
+        <% } %>
+    </div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">New Recipe</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/add">
+          <div class="mb-3">
+            <label for="title-name" class="col-form-label">Title:</label>
+            <input type="text" class="form-control" id="title" name="name">
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Ingredients:</label>
+            <input type="text" class="form-control" id="required" name="required">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Directions:</label>
+            <textarea class="form-control" id="how" name="how"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Save"/> 
+          </div>
+        </form>        
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editModalLabel">Edit Recipe</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/edit">
+           
+          <div class="mb-3">
+            <input type="hidden" class="edit_id form-control" id="edit_id" name="id">
+            <label for="title-name" class="col-form-label">Title:</label>
+            <input type="text" class="edit-title form-control" id="title" name="name">
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Ingredients:</label>
+            <input type="text" class="edit-ind form-control" id="required" name="required">
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Directions:</label>
+            <textarea class="edit-dir form-control" id="how" name="how"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Save"/> 
+          </div>
+        </form>        
+      </div>
+      
+    </div>
+  </div>
+</div>
+      
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".delete-button");
+    
+        deleteButtons.forEach((button) => {
+          button.addEventListener("click", async function () {
+            const id = button.getAttribute("data-id");
+            console.log(id);
+            try {
+                const response = await fetch(`/delete/${id}`, {
+                method: "DELETE",
+              });
+    
+              if (response.ok) {
+                console.log("The entry was deleted");
+                location.href = "/";
+              } else {
+                throw new Error("Failed to delete entry");
+              }
+            } catch (error) {
+              console.error("Error deleting entry:", error);
+            }
+          });
+        });
+      });
+    </script>
+    <script>
+      const editButtons = document.querySelectorAll(`[data-bs-target="#editModal"]`);
+      editButtons.forEach((button) => {
+        button.addEventListener("click", async function () {
+          document.querySelector(".edit-title").setAttribute("value",button.getAttribute("recipie-name"));
+          document.querySelector(".edit-ind").setAttribute("value",button.getAttribute("recipie-required"));
+          document.querySelector(".edit-dir").value = (button.getAttribute("recipie-how"));
+          document.querySelector(".edit_id").setAttribute("value",button.getAttribute("recipie-id"));
+        })
+      })
+
+    </script>
+    
+    
+  </body>
+  </body>
+</html>
